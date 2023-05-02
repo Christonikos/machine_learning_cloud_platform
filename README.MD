@@ -1,4 +1,4 @@
-#Census Bureau Data Classifier with FastAPI, CI/CD & GitHub Actions
+# Census Bureau Data Classifier with FastAPI, CI/CD & GitHub Actions
 
 ## 📊Project Description:
 This is a project focused on the integration, deployment, and management of machine learning models within a cloud-based environment using the FastAPI framework. The main objective is to streamline the process of deploying ML models, enabling seamless interaction between end-users and the prediction engine, while ensuring efficient resource utilization and scalability.
