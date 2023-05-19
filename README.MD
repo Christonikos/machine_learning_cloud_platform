@@ -17,3 +17,28 @@ Classification Model, Census Bureau Data, Unit Tests, Data Slices, Model Perform
 - Includes comprehensive unit tests and API tests to validate model predictions, ensuring optimal accuracy and reliability.
 - Detailed model card is provided, explaining each step from data preparation and model training to performance evaluation and deployment.
 - Implements a CI/CD pipeline using GitHub Actions, enabling efficient development, testing, and automated deployment of the model.
+
+# Results
+
+In this section, we present key findings and results from our model's performance evaluation.
+
+The model performance was evaluated across different age groups to provide a thorough understanding of its reliability across various life stages. Age groups were defined as follows:
+
+- '17-24: College Age / Early Career'
+- '25-34: Early Adults / Young Professionals'
+- '35-44: Midlife / Settled Adults'
+- '45-54: Late Midlife'
+- '55-64: Pre-Retirement'
+- '65-90: Retirement Age'
+
+Each age group represented a unique life stage, allowing for a nuanced analysis of the model's performance.
+
+The evaluation metrics used included precision, recall, F-beta score, AUC, sensitivity, and specificity. All these metrics provided a comprehensive picture of the model's overall performance and its ability to correctly predict whether an individual's income exceeds $50k per year.
+
+The figure below summarizes the model's performance across these age groups.
+
+<p align="center">
+  <img src="figures/age_binned_classification.png" alt="Age Binned Classification" width="100%"/>
+</p>
+For more details about the model's performance, hyperparameters, training steps, and cross-validation results, please refer to the [model card](model_card.md).
+
