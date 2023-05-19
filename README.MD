@@ -1,18 +1,19 @@
 # Census Bureau Data Classifier with FastAPI, CI/CD & GitHub Actions
 
 ## 📊Project Description:
-This is a project focused on the integration, deployment, and management of machine learning models within a cloud-based environment using the FastAPI framework. The main objective is to streamline the process of deploying ML models, enabling seamless interaction between end-users and the prediction engine, while ensuring efficient resource utilization and scalability.
+This project demonstrates the development and deployment of a binary classification model trained on the Census Bureau dataset, aimed at predicting whether a person's income exceeds $50K per year. The model is an XGBoost classifier and it was optimized and validated for various age groups, providing insights into its performance across different life stages. This is an important aspect considering the model's potential use cases in real-world applications.
 
-The project leverages FastAPI, a high-performance, Python web framework, to develop a RESTful API that serves as an interface for the ML model. This API is then deployed to a cloud application platform, which provides the necessary infrastructure and resources for hosting and scaling the application as needed.
+FastAPI, a high-performance Python web framework, is used to serve the trained model via a RESTful API. This enables end users to interact with the model in a simple and effective way. The API is deployed to a cloud-based platform, ensuring efficient resource utilization and scalability.
 
-In addition to simplifying the deployment process, the project also emphasizes best practices for model management, monitoring, and versioning. It demonstrates the use of modern tools and techniques for containerization, continuous integration, and continuous deployment (CI/CD) pipelines, ensuring that the ML model remains up-to-date and aligned with the latest data.
+In addition to a focus on deployment, the project incorporates best practices for model management, performance monitoring, versioning, and explains each step in detail via a model card. A Continuous Integration/Continuous Deployment (CI/CD) pipeline is implemented using GitHub Actions, providing automated model testing, version control, and deployment.
 
 ## 🔑 Keywords:
-Classification Model, Census Bureau Data, Unit Tests, Data Slices, Model Performance, FastAPI, API Tests, Slice Validation, CI/CD Framework, GitHub Actions
+Classification Model, Census Bureau Data, Unit Tests, Data Slices, Model Performance, FastAPI, API Tests, Slice Validation, CI/CD Framework, GitHub Actions, XGBoost Classifier, Age-group Performance, Model Card
 
 ## 📝 Features:
-- Utilizes a cutting-edge classification model trained on the rich and diverse Census Bureau dataset
-- Includes comprehensive unit tests that monitor model performance across various data slices, ensuring optimal accuracy and reliability
-- Seamlessly deploys the model using the robust FastAPI package, providing a user-friendly API for easy integration and consumption
-- Incorporates API tests to validate model predictions and maintain high-quality results
-- Integrates a seamless CI/CD framework using GitHub Actions to enable efficient development, testing, and deployment of the model
+- Leverages an XGBoost classifier trained on the diverse Census Bureau dataset, tackling the task of predicting whether an individual's income exceeds $50K per year.
+- Model performance is evaluated across different age groups, providing insights into the model's reliability across various life stages.
+- FastAPI package is used for deploying the model, providing an intuitive API for integration and consumption.
+- Includes comprehensive unit tests and API tests to validate model predictions, ensuring optimal accuracy and reliability.
+- Detailed model card is provided, explaining each step from data preparation and model training to performance evaluation and deployment.
+- Implements a CI/CD pipeline using GitHub Actions, enabling efficient development, testing, and automated deployment of the model.
