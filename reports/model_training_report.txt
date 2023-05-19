@@ -1,0 +1,121 @@
+
+    Model Training Information:
+
+    1. Date and Time: 2023-05-17 11:18:14
+
+    2. Data:
+        - Shape: (32561, 107)
+        - Loaded from: ../data
+
+    3. Model:
+        - Type: XGBClassifier
+        - Stored at: ../models/trained_model.joblib
+
+    4. Hyperparameters:
+        - Initial: {
+            "n_estimators": [
+                        50,
+                        100,
+                        200
+            ],
+            "max_depth": [
+                        6,
+                        10,
+                        15
+            ],
+            "learning_rate": [
+                        0.01,
+                        0.1,
+                        0.3
+            ],
+            "subsample": [
+                        0.5,
+                        0.8,
+                        1
+            ],
+            "colsample_bytree": [
+                        0.5,
+                        0.8,
+                        1
+            ]
+}
+        - Final (best): {
+            "objective": "binary:logistic",
+            "use_label_encoder": null,
+            "base_score": null,
+            "booster": null,
+            "callbacks": null,
+            "colsample_bylevel": null,
+            "colsample_bynode": null,
+            "colsample_bytree": 1,
+            "early_stopping_rounds": null,
+            "enable_categorical": false,
+            "eval_metric": "logloss",
+            "feature_types": null,
+            "gamma": null,
+            "gpu_id": null,
+            "grow_policy": null,
+            "importance_type": null,
+            "interaction_constraints": null,
+            "learning_rate": 0.1,
+            "max_bin": null,
+            "max_cat_threshold": null,
+            "max_cat_to_onehot": null,
+            "max_delta_step": null,
+            "max_depth": 6,
+            "max_leaves": null,
+            "min_child_weight": null,
+            "missing": NaN,
+            "monotone_constraints": null,
+            "n_estimators": 100,
+            "n_jobs": null,
+            "num_parallel_tree": null,
+            "predictor": null,
+            "random_state": null,
+            "reg_alpha": null,
+            "reg_lambda": null,
+            "sampling_method": null,
+            "scale_pos_weight": null,
+            "subsample": 0.5,
+            "tree_method": null,
+            "validate_parameters": null,
+            "verbosity": null
+}
+
+    5. Cross-Validation:
+        - Type: K-Fold
+        - Number of folds: 5
+
+    6. Training Steps:
+        - Split the data into features (X) and target (y)
+        - Initialize the XGBoost model
+        - Define the hyperparameters grid
+        - Initialize a RandomizedSearchCV object for hyperparameter tuning
+        - Fit the model and find the best parameters
+        - Extract the best estimator
+        - Initialize a KFold splitter
+        - For each fold, fit the best model and calculate precision, recall, and F-beta scores
+        - Save the best model to disk
+
+     7. Metrics:
+         {
+            "mean_precision": 0.6987477211811629,
+            "mean_recall": 0.5900499442796492,
+            "mean_fbeta": 0.6392019812849713,
+            "mean_auc": 0.8930697344086302,
+            "mean_sensitivity": 0.9189167270912655,
+            "mean_specificity": 0.5900499442796492
+}
+
+     8. Metrics (Explained in the context of medical diagnostics):
+        - Precision: This is the proportion of patients that your model correctly identified as having the disease out of all the patients it identified as having the disease. A higher precision means that when your model predicts a patient has the disease, it is highly likely that the patient truly has the disease. This is critical in scenarios where false positives could lead to unnecessary stress or treatments.
+
+        - Recall (Sensitivity): This is the proportion of patients with the disease that your model correctly identifies. A higher recall means that your model is good at detecting the disease when it is present. This is crucial in conditions where early detection significantly improves outcomes.
+
+        - F-beta score: This score is a balance between precision and recall. Depending on the clinical setting, you might want to emphasize recall (if missing a diagnosis has severe consequences) or precision (if false positives are particularly costly or harmful).
+
+        - AUC (Area Under the ROC Curve): This metric tells you about the model's ability to distinguish between patients with the disease and without the disease. The AUC represents the probability that a randomly chosen positive (disease) example is ranked higher than a randomly chosen negative (no disease) example. The higher the AUC, the better the model is at differentiating between patients with the disease and without it.
+
+        - Specificity: This is the proportion of healthy patients that your model correctly identified as being healthy. A higher specificity means that the model is good at avoiding false alarms in healthy patients. This is especially important in tests where a false positive could lead to additional invasive testing or unnecessary treatment.
+
+    

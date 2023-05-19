@@ -1,0 +1,1 @@
+*/10 * * * * python /home/antoniosf/code/A_Dynamic_Risk_Assessment_System/fullprocess.py

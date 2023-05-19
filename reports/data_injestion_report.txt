@@ -1,0 +1,29 @@
+
+        Data Preprocessing Information:
+
+        1. Date and Time: 2023-05-17 11:31:44
+
+
+        2. Original Data:
+            - Shape: (32561, 11)
+            - Loaded from: path/to/original_data.csv
+
+        3. Preprocessed Data:
+            - Shape: (32561, 106)
+            - Stored at: ../data/preprocessed
+
+        4. Features:
+            - Number of categorical columns: 8
+            - Categorical columns: ['workclass', 'education', 'marital-status', 'occupation', 'relationship', 'race', 'sex', 'native-country']
+            - Number of continuous columns: 3
+            - Continuous columns: ['age', 'fnlgt', 'hours-per-week']
+
+        5. Preprocessing Steps:
+            - Remove white spaces from the column names
+            - Binarize the target column (salary)
+            - Drop the columns: education-num, capital-gain, capital-loss
+            - Apply one-hot encoding to the categorical features
+            - Scale the continuous features using RobustScaler
+            - Concatenate the preprocessed categorical and continuous features
+            - Add the target column (salary) to the preprocessed data
+            

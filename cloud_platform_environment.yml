@@ -13,6 +13,16 @@ dependencies:
   - uvicorn
   - gunicorn
   - pip=20.3.3
-  - spyder-kernels=2.1
+  - spyder-kernels=2.4
   - qt
   - pytest
+  - matplotlib
+  - pip:
+    - ydata-profiling
+    - pandas_dq
+    - reportlab
+    - PyPDF2
+    - pdfreader
+    - PyMuPDF
+    - pdfrw
+

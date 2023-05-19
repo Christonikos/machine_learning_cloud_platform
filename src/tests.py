@@ -8,11 +8,15 @@ import os
 import tempfile
 import shutil
 import pandas as pd
-
 import pytest
-
+from sklearn.metrics import precision_score, recall_score, fbeta_score
 from data_injestion_01 import load_raw_data
+from model_training_02 import compute_model_metrics, data_loader, train_and_save_model
 
+
+# =============================================================================
+# DATA INJESTION TESTS (01)
+# =============================================================================
 @pytest.fixture
 def create_temp_csv_files():
     """
@@ -26,19 +30,16 @@ def create_temp_csv_files():
     temp_dir = tempfile.mkdtemp()
 
     # Create a 'raw' subdirectory inside the temporary directory
-    os.makedirs(os.path.join(temp_dir, 'raw'))
+    os.makedirs(os.path.join(temp_dir, "raw"))
 
     # Define the data for the sample CSV file
-    test_data = {
-        'A': [1, 2, 3],
-        'B': [4, 5, 6]
-    }
+    test_data = {"A": [1, 2, 3], "B": [4, 5, 6]}
 
     # Create a pandas DataFrame from the test data
     df = pd.DataFrame(test_data)
 
     # Save the DataFrame as a CSV file inside the 'raw' subdirectory
-    df.to_csv(os.path.join(temp_dir, 'raw', 'test.csv'), index=False)
+    df.to_csv(os.path.join(temp_dir, "raw", "test.csv"), index=False)
 
     # Yield the path to the temporary directory so that it can be used by the test functions
     yield temp_dir
@@ -55,10 +56,7 @@ def test_load_raw_data(create_temp_csv_files):
     path_to_data = create_temp_csv_files
     data_frame = load_raw_data(path_to_data)
 
-    expected_data = {
-        'A': [1, 2, 3],
-        'B': [4, 5, 6]
-    }
+    expected_data = {"A": [1, 2, 3], "B": [4, 5, 6]}
 
     expected_data_frame = pd.DataFrame(expected_data)
 
@@ -81,8 +79,55 @@ def test_load_raw_data_no_csv_files(create_temp_csv_files):
     Assert that the function returns None.
     """
     # Remove the CSV file created by the fixture
-    os.remove(os.path.join(create_temp_csv_files, 'raw', 'test.csv'))
+    os.remove(os.path.join(create_temp_csv_files, "raw", "test.csv"))
 
     path_to_data = create_temp_csv_files
     data_frame = load_raw_data(path_to_data)
     assert data_frame is None
+
+
+# =============================================================================
+# MODEL TRAINING TESTS (02)
+# =============================================================================
+
+
+def test_compute_model_metrics():
+    """
+    Test the compute_model_metrics function.
+    This function checks if the returned precision, recall and fbeta scores match
+    the expected scores computed using sklearn's functions.
+    """
+    y_true = [1, 0, 1, 0, 1]
+    y_pred = [1, 0, 1, 1, 0]
+    beta = 1
+    precision, recall, fbeta = compute_model_metrics(y_true, y_pred, beta=beta)
+
+    assert precision == precision_score(y_true, y_pred), "Mismatch in precision scores"
+    assert recall == recall_score(y_true, y_pred), "Mismatch in recall scores"
+    assert fbeta == fbeta_score(y_true, y_pred, beta=beta), "Mismatch in fbeta scores"
+
+
+def test_data_loader():
+    """
+    Test the data_loader function.
+    This function checks if the returned object is a pandas DataFrame.
+    """
+    data = data_loader(data_type="preprocessed", data_path="../data")
+    assert isinstance(data, pd.DataFrame), "Loaded data is not a pandas DataFrame"
+
+
+@pytest.mark.skip(
+    reason="This test requires a dataset and could take a long time to run."
+)
+def test_train_and_save_model():
+    """
+    Test the train_and_save_model function.
+    This function currently checks if the function runs without error using sample data.
+    As this function performs training which could take a long time, it is skipped by default.
+    """
+    data = pd.read_csv("../data/preprocessed/sample_data.csv")
+    target = "salary"
+    try:
+        train_and_save_model(data, target)
+    except Exception as e:
+        pytest.fail(f"train_and_save_model raised exception: {e}")

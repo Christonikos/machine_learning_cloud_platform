@@ -1,0 +1,6 @@
+[core]
+    remote = new_remote
+[cache]
+    type = copy
+['remote "new_remote"']
+    url = s3://ml-heroku-bucket
