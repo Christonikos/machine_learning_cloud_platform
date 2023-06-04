@@ -1,9 +1,0 @@
-numpy
-pandas
-pandas-profiling
-scikit-learn
-pytest
-requests
-fastapi==0.70.0
-uvicorn
-flake8
