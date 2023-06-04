@@ -18,6 +18,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, RobustScaler
 from datetime import datetime
+import joblib
 import pandas as pd
 
 
@@ -57,7 +58,9 @@ def load_raw_data(path_to_data: str) -> Optional[pd.DataFrame]:
     try:
         data_frame = pd.read_csv(file_name)
         # Remove white space from column names
-        data_frame.columns = [col.replace(" ", "") for col in data_frame.columns]
+        data_frame.columns = [
+            col.replace(" ", "") for col in data_frame.columns
+        ]
     except Exception as e:
         logger.error(f"Error reading CSV file {file_name}: {e}")
         return None
@@ -76,7 +79,9 @@ def generate_profile_report(
     raw_data: pd.DataFrame, report_dir: str = "../reports"
 ) -> None:
     """Generate a pandas profiling report and save it as an HTML file."""
-    profile = ProfileReport(raw_data, title="Pandas Profiling Report", explorative=True)
+    profile = ProfileReport(
+        raw_data, title="Pandas Profiling Report", explorative=True
+    )
 
     if not os.path.exists(report_dir):
         os.makedirs(report_dir)
@@ -84,7 +89,9 @@ def generate_profile_report(
     profile.to_file(os.path.join(report_dir, "eda_report.html"))
 
 
-def data_inspection(raw_data: pd.DataFrame, report_dir: str = "../reports") -> None:
+def data_inspection(
+    raw_data: pd.DataFrame, report_dir: str = "../reports"
+) -> None:
     """Script for data inspection. Currently generates a pandas Profile report"""
     generate_profile_report(raw_data, report_dir)
 
@@ -144,8 +151,49 @@ def save_preprocessing_info(
     print(f"Preprocessing information saved to {file_path}")
 
 
-def data_preprocessing(raw_data: pd.DataFrame) -> None:
+def data_preprocessing(
+    raw_data: pd.DataFrame,
+    inference: bool = False,
+    preprocessor: Optional[ColumnTransformer] = None,
+) -> Optional[pd.DataFrame]:
     """
+    Preprocesses the data by applying OneHotEncoding for the categorical values
+    and RobustScaler for the continuous values.
+
+    If inference is False, fits the preprocessing pipeline, transforms the data,
+    and saves the pipeline and preprocessed data to disk.
+
+    If inference is True, only transforms the data using the provided preprocessor.
+
+    Args:
+        raw_data: The raw data to preprocess.
+        inference: Whether or not the function is being used for inference.
+                   Defaults to False.
+        preprocessor: The fitted preprocessor to use for transforming the data.
+                      Must be provided if inference=True.
+
+    Returns:
+        preprocessed_data: The preprocessed data, or None if inference=False.
+
+    Artifacts:
+        preprocessor.joblib: The fitted preprocessing pipeline, including the
+                             OneHotEncoder for categorical features and the
+                             RobustScaler for continuous features. This file is
+                             saved to disk when inference=False and is loaded
+                             when inference=True. The file allows the exact same
+                             preprocessing steps to be applied to new data.
+
+        preprocessed_data: The preprocessed data. It is saved as a .csv file to the
+                           directory specified by preprocessed_data_path when
+                           inference=False. This is not saved when inference=True.
+
+        Other artifacts: The function also generates a text file with detailed
+                         information about the preprocessing when inference=False.
+                         This includes details about the input raw data,
+                         preprocessed data, and the categorical and continuous
+                         features.
+
+
     Notes from the Pandas Profiling:
 
     1. education-num is highly overall correlated with education	High correlation
@@ -159,14 +207,15 @@ def data_preprocessing(raw_data: pd.DataFrame) -> None:
     """
 
     # Prepare categorical and continuous pipelines
-    categorical_pipeline = Pipeline(steps=[("onehot", OneHotEncoder())])
+    categorical_pipeline = Pipeline(
+        steps=[("onehot", OneHotEncoder(handle_unknown="ignore"))]
+    )
     continuous_pipeline = Pipeline(steps=[("scaler", RobustScaler())])
 
     # Remove white space from the column naming
     raw_data.columns = raw_data.columns.str.strip()
     raw_data = binarize_label(raw_data.copy())
 
-    # Points 1 & 2, 7 & 8
     raw_data.drop(
         columns=["education-num", "capital-gain", "capital-loss"], inplace=True
     )
@@ -185,66 +234,83 @@ def data_preprocessing(raw_data: pd.DataFrame) -> None:
     X_continuous = raw_data.drop(columns=categorical_features)
 
     # Create a column transformer to handle both pipelines
-    preprocessor = ColumnTransformer(
-        transformers=[
-            ("cat", categorical_pipeline, categorical_features),
-            ("cont", continuous_pipeline, X_continuous.columns),
-        ]
-    )
-    # Fit and transform the data
-    X_preprocessed = preprocessor.fit_transform(raw_data)
-
-    # Get the transformed categorical features and their column names
-    X_categorical = preprocessor.named_transformers_["cat"]["onehot"].transform(
-        raw_data[categorical_features]
-    )
-    cat_columns = list(
-        preprocessor.named_transformers_["cat"]["onehot"].get_feature_names_out(
-            categorical_features
+    if not preprocessor:
+        preprocessor = ColumnTransformer(
+            transformers=[
+                ("cat", categorical_pipeline, categorical_features),
+                ("cont", continuous_pipeline, X_continuous.columns),
+            ]
         )
+        # Fit and transform the data
+        X_preprocessed = preprocessor.fit_transform(raw_data)
+        # Save the fitted preprocessor for later use
+        model_path = "../models"
+        if not os.path.exists(model_path):
+            os.makedirs(model_path)
+        preprocessor_fname = os.path.join(model_path, "preprocessor.joblib")
+
+        joblib.dump(preprocessor, preprocessor_fname)
+    else:
+        # Just transform the data
+        X_preprocessed = preprocessor.transform(raw_data)
+
+    cat_columns = list(
+        preprocessor.named_transformers_["cat"][
+            "onehot"
+        ].get_feature_names_out(categorical_features)
     )
 
     cont_columns = list(X_continuous.columns)
+    # Get the transformed categorical features and their column names
+    X_categorical = preprocessor.named_transformers_["cat"][
+        "onehot"
+    ].transform(raw_data[categorical_features])
+    cat_columns = preprocessor.named_transformers_["cat"][
+        "onehot"
+    ].get_feature_names_out(categorical_features)
 
     # Get the transformed continuous features and their column names
-    X_continuous = preprocessor.named_transformers_["cont"]["scaler"].transform(
-        X_continuous
-    )
+    X_continuous = preprocessor.named_transformers_["cont"][
+        "scaler"
+    ].transform(X_continuous)
 
-    # Create DataFrames for the transformed features and reset their indices
-    cat_df = pd.DataFrame(X_categorical.toarray(), columns=cat_columns).reset_index(
+    # Create DataFrames for the transformed features
+    cat_df = pd.DataFrame(
+        X_categorical.toarray(), columns=cat_columns
+    ).reset_index(
         drop=True
     )  # Convert sparse matrix to array
-    cont_df = pd.DataFrame(X_continuous, columns=cont_columns).reset_index(drop=True)
-
-    # Reset the index for the target column
-    target = target.reset_index(drop=True)
+    cont_df = pd.DataFrame(X_continuous, columns=cont_columns).reset_index(
+        drop=True
+    )
 
     # Combine the transformed features and the target column into a single DataFrame
     preprocessed_data = pd.concat([cat_df, cont_df], axis=1)
 
-    # TODO: Make sure there are no '?' columns left in the data and also that
-    # the 'unamed:0' column is dropped
     preprocessed_data["salary"] = target
 
-    # save the preprocessed dataframe
-    preprocessed_data_path = "../data/preprocessed"
-    if not os.path.exists(preprocessed_data_path):
-        os.makedirs(preprocessed_data_path)
-    fname = os.path.join(preprocessed_data_path, "census_preprocessed.csv")
-    preprocessed_data.to_csv(fname)
-    # Reporting
-    # # Save the preprocessing information to a .txt file
-    save_preprocessing_info(
-        raw_data,
-        preprocessed_data,
-        categorical_features,
-        cont_columns,
-        "path/to/original_data.csv",
-        preprocessed_data_path,
-    )
+    if not inference:
+        # Save the preprocessed dataframe
+        preprocessed_data_path = "../data/preprocessed"
+        if not os.path.exists(preprocessed_data_path):
+            os.makedirs(preprocessed_data_path)
+        fname = os.path.join(preprocessed_data_path, "census_preprocessed.csv")
+        preprocessed_data.to_csv(fname)
+        # Reporting
+        save_preprocessing_info(
+            raw_data,
+            preprocessed_data,
+            categorical_features,
+            cont_columns,
+            "path/to/original_data.csv",
+            preprocessed_data_path,
+        )
+        return None
+    else:
+        return preprocessed_data
 
 
+# %%
 # =============================================================================
 # MAIN CALLER
 # =============================================================================
