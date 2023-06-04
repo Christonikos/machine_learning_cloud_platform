@@ -12,7 +12,7 @@ app = FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to the Main API"}
+    return {"Welcome to the Main API"}
 
 
 app.mount("/v1", application)
