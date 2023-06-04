@@ -121,7 +121,7 @@ def test_data_loader():
     Test the data_loader function.
     This function checks if the returned object is a pandas DataFrame.
     """
-    data = data_loader(data_type="preprocessed", data_path="../data")
+    data = data_loader(data_type="preprocessed", data_path="data")
     assert isinstance(
         data, pd.DataFrame
     ), "Loaded data is not a pandas DataFrame"
