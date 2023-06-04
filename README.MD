@@ -18,6 +18,9 @@ Classification Model, Census Bureau Data, Unit Tests, Data Slices, Model Perform
 - Detailed model card is provided, explaining each step from data preparation and model training to performance evaluation and deployment.
 - Implements a CI/CD pipeline using GitHub Actions, enabling efficient development, testing, and automated deployment of the model.
 
+## 🌐 Live Deployment on Render
+Our FastAPI application is deployed and available for use at Render. It's live and can accept POST requests. This allows for real-world applications and the ability to interact with our XGBoost classifier trained on the Census Bureau dataset.
+
 # Results
 
 In this section, we present key findings and results from our model's performance evaluation.
@@ -41,4 +44,3 @@ The figure below summarizes the model's performance across these age groups.
   <img src="figures/age_binned_classification.png" alt="Age Binned Classification" width="100%"/>
 </p>
 For more details about the model's performance, hyperparameters, training steps, and cross-validation results, please refer to the [model card](model_card.md).
-

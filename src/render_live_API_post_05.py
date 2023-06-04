@@ -10,7 +10,7 @@
 import requests
 
 # The URL of the live Render API.
-url = "https://census-ml-api-n83d.onrender.com"
+url = "https://census-ml-api-n83d.onrender.com/v1/predict"
 
 payload = {
     "age": 23,
