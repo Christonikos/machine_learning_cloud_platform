@@ -25,11 +25,10 @@ import os
 import joblib
 import logging
 from typing import Optional, Any
-from model_training_02 import data_loader
-
 from sklearn.metrics import roc_auc_score, fbeta_score
 import matplotlib.pyplot as plt
 import seaborn as sns
+from .model_training_02 import data_loader
 
 
 # Set up logging configuration
@@ -154,9 +153,7 @@ def plot_scores_and_samples(score_df: pd.DataFrame, n_samples: dict):
     ax3 = ax1.twiny()
     ax3.set_xticks(ax1.get_xticks())
     ax3.set_xbound(ax1.get_xbound())
-    ax3.set_xticklabels(
-        [n_samples[label] for label in score_df["label"]], rotation=45
-    )
+    ax3.set_xticklabels([n_samples[label] for label in score_df["label"]], rotation=45)
 
     # Label the secondary x-axis
     ax3.set_xlabel("Number of samples")
@@ -211,9 +208,7 @@ def run_model_on_AGE_slices(raw_data):
         fbeta = fbeta_score(true_labels, predictions, beta=beta)
 
         # Add scores to the list
-        scores.append(
-            {"label": label.split(":")[0], "AUC": auc, "F-beta": fbeta}
-        )
+        scores.append({"label": label.split(":")[0], "AUC": auc, "F-beta": fbeta})
 
     # Create the DataFrame
     score_df = pd.DataFrame(scores)

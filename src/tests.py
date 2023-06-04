@@ -107,13 +107,9 @@ def test_compute_model_metrics():
     beta = 1
     precision, recall, fbeta = compute_model_metrics(y_true, y_pred, beta=beta)
 
-    assert precision == precision_score(
-        y_true, y_pred
-    ), "Mismatch in precision scores"
+    assert precision == precision_score(y_true, y_pred), "Mismatch in precision scores"
     assert recall == recall_score(y_true, y_pred), "Mismatch in recall scores"
-    assert fbeta == fbeta_score(
-        y_true, y_pred, beta=beta
-    ), "Mismatch in fbeta scores"
+    assert fbeta == fbeta_score(y_true, y_pred, beta=beta), "Mismatch in fbeta scores"
 
 
 def test_data_loader():
@@ -122,9 +118,7 @@ def test_data_loader():
     This function checks if the returned object is a pandas DataFrame.
     """
     data = data_loader(data_type="preprocessed", data_path="../data")
-    assert isinstance(
-        data, pd.DataFrame
-    ), "Loaded data is not a pandas DataFrame"
+    assert isinstance(data, pd.DataFrame), "Loaded data is not a pandas DataFrame"
 
 
 @pytest.mark.skip(

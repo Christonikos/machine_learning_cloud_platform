@@ -14,8 +14,8 @@ import pandas as pd
 import joblib
 import logging
 from typing import Optional, Any
-from model_slices_03 import load_model
-from data_injestion_01 import data_preprocessing
+from .model_slices_03 import load_model
+from .data_injestion_01 import data_preprocessing
 
 # =============================================================================
 # UTILITY FUNCTIONS/CLASSES
@@ -193,7 +193,6 @@ def main(args):
 # WRAPER
 # =============================================================================
 if __name__ == "__main__":
-
     # =========================================================================
     # ARGPARSE INPUTS
     # =========================================================================

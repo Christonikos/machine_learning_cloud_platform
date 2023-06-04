@@ -58,9 +58,7 @@ def load_raw_data(path_to_data: str) -> Optional[pd.DataFrame]:
     try:
         data_frame = pd.read_csv(file_name)
         # Remove white space from column names
-        data_frame.columns = [
-            col.replace(" ", "") for col in data_frame.columns
-        ]
+        data_frame.columns = [col.replace(" ", "") for col in data_frame.columns]
     except Exception as e:
         logger.error(f"Error reading CSV file {file_name}: {e}")
         return None
@@ -79,9 +77,7 @@ def generate_profile_report(
     raw_data: pd.DataFrame, report_dir: str = "../reports"
 ) -> None:
     """Generate a pandas profiling report and save it as an HTML file."""
-    profile = ProfileReport(
-        raw_data, title="Pandas Profiling Report", explorative=True
-    )
+    profile = ProfileReport(raw_data, title="Pandas Profiling Report", explorative=True)
 
     if not os.path.exists(report_dir):
         os.makedirs(report_dir)
@@ -89,9 +85,7 @@ def generate_profile_report(
     profile.to_file(os.path.join(report_dir, "eda_report.html"))
 
 
-def data_inspection(
-    raw_data: pd.DataFrame, report_dir: str = "../reports"
-) -> None:
+def data_inspection(raw_data: pd.DataFrame, report_dir: str = "../reports") -> None:
     """Script for data inspection. Currently generates a pandas Profile report"""
     generate_profile_report(raw_data, report_dir)
 
@@ -255,34 +249,30 @@ def data_preprocessing(
         X_preprocessed = preprocessor.transform(raw_data)
 
     cat_columns = list(
-        preprocessor.named_transformers_["cat"][
-            "onehot"
-        ].get_feature_names_out(categorical_features)
+        preprocessor.named_transformers_["cat"]["onehot"].get_feature_names_out(
+            categorical_features
+        )
     )
 
     cont_columns = list(X_continuous.columns)
     # Get the transformed categorical features and their column names
-    X_categorical = preprocessor.named_transformers_["cat"][
-        "onehot"
-    ].transform(raw_data[categorical_features])
+    X_categorical = preprocessor.named_transformers_["cat"]["onehot"].transform(
+        raw_data[categorical_features]
+    )
     cat_columns = preprocessor.named_transformers_["cat"][
         "onehot"
     ].get_feature_names_out(categorical_features)
 
     # Get the transformed continuous features and their column names
-    X_continuous = preprocessor.named_transformers_["cont"][
-        "scaler"
-    ].transform(X_continuous)
+    X_continuous = preprocessor.named_transformers_["cont"]["scaler"].transform(
+        X_continuous
+    )
 
     # Create DataFrames for the transformed features
-    cat_df = pd.DataFrame(
-        X_categorical.toarray(), columns=cat_columns
-    ).reset_index(
+    cat_df = pd.DataFrame(X_categorical.toarray(), columns=cat_columns).reset_index(
         drop=True
     )  # Convert sparse matrix to array
-    cont_df = pd.DataFrame(X_continuous, columns=cont_columns).reset_index(
-        drop=True
-    )
+    cont_df = pd.DataFrame(X_continuous, columns=cont_columns).reset_index(drop=True)
 
     # Combine the transformed features and the target column into a single DataFrame
     preprocessed_data = pd.concat([cat_df, cont_df], axis=1)
