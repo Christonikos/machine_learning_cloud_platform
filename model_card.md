@@ -72,10 +72,34 @@ These metrics have the following interpretations in the context of binary classi
 
 - Specificity: This is the proportion of actual negative instances that were correctly identified by the model. A high specificity indicates that the model is good at avoiding false positives.
 
-## Limitations
-Although the model performs well overall (mean, across-fold AUC = 0.89), it
-remains at chance level for the age bin of 17-24 years old (early career/college).
-Further investigation is required.
+
+## Caveats and Recommendations
+
+While this model shows promising results, it's important to consider several caveats:
+
+1. **Age Bias:** The model is less accurate when predicting for individuals in the 17-24 age range, indicating that it may not perform as well for younger individuals. This is a limitation of the model and needs to be addressed in future versions or other modeling approaches.
+
+2. **Data Limitations:** The model was trained on U.S. Census data from 1994. It may not accurately reflect current socio-economic factors affecting income. For a more accurate prediction, it is recommended to train the model with recent data and take into account current trends.
+
+3. **Binary Classification:** The model only predicts whether income is above or below $50K. It does not provide specific income predictions within those ranges, which may limit its utility in certain applications.
+
+4. **Imbalanced Classes:** The dataset is skewed towards the less than $50K class, which may lead to bias in the model's predictions. It is recommended to balance the classes in the dataset or adjust the model to handle imbalanced data better.
+
+5. **Model Interpretability:** XGBoost models can sometimes be difficult to interpret due to their ensemble nature. For applications where interpretability is important, simpler models or techniques like SHAP values can be used to understand the model's predictions.
+
+## Ethical Considerations
+
+With the use of any model predicting income classes, there are inherent ethical considerations:
+
+1. **Data Privacy:** The data used to train this model was obtained from public datasets, but it's important to ensure the privacy of individuals' information when dealing with sensitive data like income. Always adhere to data privacy regulations and guidelines.
+
+2. **Fairness:** The model may perform differently for different demographic groups, which raises fairness concerns. It's crucial to ensure that the model's predictions are equitable across different demographic groups.
+
+3. **Use of Predictions:** The predictions made by this model can influence important decisions about individuals, such as loan approvals or employment decisions. It's essential to use this model responsibly and consider its limitations to prevent unjust outcomes.
+
+4. **Transparency:** It's important to disclose the model's workings and performance metrics to the users or stakeholders to make informed decisions based on the model's predictions.
+
+5. **Bias:** The data used to train this model may contain historical biases that can be propagated in the model's predictions. No bias investigation was made. One such investigation can happen with the Aequitas package. 
 
 ## Hyperparameters
 Initial hyperparameters:
