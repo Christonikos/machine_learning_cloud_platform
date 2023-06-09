@@ -5,7 +5,7 @@
 """
 
 from fastapi import FastAPI
-from .fast_api_app_creation_04 import app as application
+from fast_api_app_creation_04 import app as application
 
 app = FastAPI()
 

@@ -12,10 +12,11 @@ from pydantic import BaseModel, Field
 import argparse
 import pandas as pd
 import joblib
+import os
 import logging
 from typing import Optional, Any
-from .model_slices_03 import load_model
-from .data_injestion_01 import data_preprocessing
+from model_slices_03 import load_model
+from data_injestion_01 import data_preprocessing
 
 # =============================================================================
 # UTILITY FUNCTIONS/CLASSES
@@ -25,7 +26,16 @@ from .data_injestion_01 import data_preprocessing
 app = FastAPI()
 
 # Load the trained model
-model = load_model()
+model_path = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        "..",
+        "models",
+        "preprocessor.joblib",
+    )
+)
+
+model = load_model(model_path)
 
 
 def load_preprocessor(
@@ -121,7 +131,8 @@ def predict(data: Data):
     # Load the preprocessor
     # This preprocessor is a Scikit-learn ColumnTransformer that was used to preprocess the
     # training data. It is stored as a .joblib file and is loaded here for use.
-    preprocessor = load_preprocessor()
+
+    preprocessor = load_preprocessor(model_path)
 
     # Preprocess the data
     # The `data_preprocessing` function uses the loaded preprocessor to transform
@@ -159,7 +170,7 @@ def predict(data: Data):
 # =============================================================================
 
 
-def main(args):
+def main():
     """
     This function is the entry point of the script. It creates a sample data object and
     calls the `predict` function to make a prediction on this data.
@@ -193,10 +204,4 @@ def main(args):
 # WRAPER
 # =============================================================================
 if __name__ == "__main__":
-    # =========================================================================
-    # ARGPARSE INPUTS
-    # =========================================================================
-    parser = argparse.ArgumentParser(description=" ")
-    parser.add_argument("-arg1", "--arg1_long", default="", help=" ")
-    args = parser.parse_args()
-    main(args)
+    main()

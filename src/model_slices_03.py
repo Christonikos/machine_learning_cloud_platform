@@ -183,7 +183,10 @@ def run_model_on_AGE_slices(raw_data):
     # bin the AGE variable into stages
     life_stage_indices = create_life_stage_bins(raw_data.age)
     # load the model
-    model = load_model()
+    model_path = model_path = os.path.join(
+        os.path.dirname(__file__), ".." "models", "preprocessor.joblib"
+    )
+    model = load_model(model_path)
     # load the preprocessed data (where the slicing will take place)
     preprocessed_data = data_loader("preprocessed")
     preprocessed_data.salary = preprocessed_data.salary.replace(-1, 0)

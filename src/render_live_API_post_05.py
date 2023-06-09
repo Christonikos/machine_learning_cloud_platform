@@ -8,34 +8,35 @@
 # IMPORT MODULES
 # =============================================================================
 import requests
+import json
 
-# The URL of the live Render API.
-url = "https://census-ml-api-n83d.onrender.com/v1/predict"
+# Define the URL
+url = "https://census-ml-api-n83d.onrender.com/predict"
 
-payload = {
-    "age": 23,
-    "fnlgt": 263886,
-    "workclass": "Private",
-    "education": "Some-college",
-    "marital-status": "Never-married",
-    "occupation": "Sales",
-    "relationship": "Not-in-family",
-    "race": "Black",
-    "sex": "Female",
-    "hours-per-week": 20,
-    "native-country": "United-States",
+# Define the data to be sent to the API
+data = {
+    "age": 35,
+    "fnlgt": 512345,
+    "workclass": "Self-emp",
+    "education": "Masters",
+    "marital_status": "Married",
+    "occupation": "Exec-managerial",
+    "relationship": "Husband",
+    "race": "White",
+    "sex": "Male",
+    "hours_per_week": 40,
+    "native_country": "Canada",
     "salary": "<=50K",
-    "education-num": 8,
-    "capital-gain": 2174,
-    "capital-loss": 0,
+    "education_num": 8,
+    "capital_gain": 2174,
+    "capital_loss": 0,
 }
 
-# Make the POST request and store the response.
-response = requests.post(url, json=payload)
+# Convert data to json format
+json_data = json.dumps(data)
 
-# If the POST request was successful, the status code will be 200.
-if response.status_code == 200:
-    print("POST request was successful.")
-    print(f"Response: {response.json()}")
-else:
-    print(f"POST request failed with status code {response.status_code}.")
+# Send the request to the API
+response = requests.post(url, json=json_data)
+
+# Print the response
+print(response.json())
