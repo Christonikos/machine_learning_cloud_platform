@@ -8,10 +8,9 @@
 # IMPORT MODULES
 # =============================================================================
 import requests
-import json
 
 # Define the URL
-url = "https://census-ml-api-n83d.onrender.com"
+url = "https://census-ml-api-n83d.onrender.com/v1/predict"
 
 # Define the data to be sent to the API
 data = {
@@ -32,11 +31,8 @@ data = {
     "capital_loss": 0,
 }
 
-# Convert data to json format
-json_data = json.dumps(data)
-
 # Send the request to the API
-response = requests.post(url, json=json_data)
+response = requests.post(url, json=data)
 
 # Print the response
 print(response.json())
