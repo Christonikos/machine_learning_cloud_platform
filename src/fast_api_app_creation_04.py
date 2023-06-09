@@ -31,7 +31,7 @@ model_path = os.path.abspath(
         os.path.dirname(__file__),
         "..",
         "models",
-        "preprocessor.joblib",
+        "trained_model.joblib",
     )
 )
 
@@ -131,8 +131,16 @@ def predict(data: Data):
     # Load the preprocessor
     # This preprocessor is a Scikit-learn ColumnTransformer that was used to preprocess the
     # training data. It is stored as a .joblib file and is loaded here for use.
+    pre_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "models",
+            "preprocessor.joblib",
+        )
+    )
 
-    preprocessor = load_preprocessor(model_path)
+    preprocessor = load_preprocessor(pre_path)
 
     # Preprocess the data
     # The `data_preprocessing` function uses the loaded preprocessor to transform
@@ -200,8 +208,4 @@ def main():
     predict(data)
 
 
-# =============================================================================
-# WRAPER
-# =============================================================================
-if __name__ == "__main__":
-    main()
+main()

@@ -11,7 +11,7 @@ import requests
 import json
 
 # Define the URL
-url = "https://census-ml-api-n83d.onrender.com/predict"
+url = "https://census-ml-api-n83d.onrender.com"
 
 # Define the data to be sent to the API
 data = {
