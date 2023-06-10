@@ -4,7 +4,7 @@ save_data_on_exit = True
 save_history = True
 save_non_project_files = False
 project_type = 'empty-project-type'
-recent_files = ['requirements.txt', 'src/fast_api_app_creation_04.py', 'src/sanitycheck.py', 'src/rest_api_test.py', 'src/main.py', '.github/workflows/python_tests.yml', 'src/model_slices_03.py', 'src/data_injestion_01.py', 'src/model_training_02.py', 'src/render_live_API_post_05.py', 'README.MD', 'model_card.md']
+recent_files = ['src/fast_api_app_creation_04.py', 'src/main.py', 'src/model_slices_03.py', 'src/setup.py', 'src/render_live_API_post_05.py', 'src/tests.py']
 
 [main]
 version = 0.2.0

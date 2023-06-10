@@ -7,12 +7,14 @@
 # =============================================================================
 # IMPORT MODULES
 # =============================================================================
+
 import requests
+import json
 
-# Define the URL
-url = "https://census-ml-api-n83d.onrender.com/v1/predict"
+# define the API endpoint
+url = "http://0.0.0.0:10000/v1/predict"
 
-# Define the data to be sent to the API
+# define the data to be sent to the API
 data = {
     "age": 35,
     "fnlgt": 512345,
@@ -23,16 +25,23 @@ data = {
     "relationship": "Husband",
     "race": "White",
     "sex": "Male",
-    "hours_per_week": 40,
+    "hours-per-week": 40,
     "native_country": "Canada",
     "salary": "<=50K",
-    "education_num": 8,
-    "capital_gain": 2174,
-    "capital_loss": 0,
+    "education-num": 8,
+    "capital-gain": 2174,
+    "capital-loss": 0,
 }
 
-# Send the request to the API
-response = requests.post(url, json=data)
+# convert dict to json
+data_json = json.dumps(data)
 
-# Print the response
-print(response.json())
+# set the headers
+headers = {"Content-Type": "application/json"}
+
+# make the POST request
+response = requests.post(url, data=data_json, headers=headers)
+
+# print the response status code and JSON
+print(f"Status code: {response.status_code}")
+print(f"Response JSON: {response.json()}")

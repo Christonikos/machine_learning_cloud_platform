@@ -23,7 +23,10 @@ from data_injestion_01 import data_preprocessing
 # =============================================================================
 
 
-app = FastAPI()
+# app = FastAPI()
+from fastapi import APIRouter
+
+router = APIRouter()
 
 # Load the trained model
 model_path = os.path.abspath(
@@ -103,12 +106,12 @@ class Data(BaseModel):
         }
 
 
-@app.get("/")
+@router.get("/")
 def read_root():
     return {"message": "Welcome to our Census Bureau Data Classifier"}
 
 
-@app.post("/predict")
+@router.post("/predict")
 def predict(data: Data):
     """
     This function accepts a POST request with a JSON body containing the input data

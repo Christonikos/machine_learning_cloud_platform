@@ -10,6 +10,7 @@ import tempfile
 import shutil
 import pandas as pd
 import pytest
+import joblib
 from sklearn.metrics import precision_score, recall_score, fbeta_score
 from .data_injestion_01 import load_raw_data
 from .model_training_02 import (
@@ -127,18 +128,22 @@ def test_data_loader():
     ), "Loaded data is not a pandas DataFrame"
 
 
-@pytest.mark.skip(
-    reason="This test requires a dataset and could take a long time to run."
-)
-def test_train_and_save_model():
+def test_load_saved_model():
     """
-    Test the train_and_save_model function.
-    This function currently checks if the function runs without error using sample data.
-    As this function performs training which could take a long time, it is skipped by default.
+    Test the load_saved_model function.
+    This function checks if a trained model can be successfully loaded.
     """
-    data = pd.read_csv("../data/preprocessed/sample_data.csv")
-    target = "salary"
+    model_path = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "models",
+            "trained_model.joblib",
+        )
+    )
+
     try:
-        train_and_save_model(data, target)
+        model = joblib.load(model_path)
+        assert model is not None, "Failed to load the saved model"
     except Exception as e:
-        pytest.fail(f"train_and_save_model raised exception: {e}")
+        pytest.fail(f"load_saved_model raised exception: {e}")
