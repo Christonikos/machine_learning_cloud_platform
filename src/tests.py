@@ -12,8 +12,8 @@ import pandas as pd
 import pytest
 import joblib
 from sklearn.metrics import precision_score, recall_score, fbeta_score
-from .data_injestion_01 import load_raw_data
-from .model_training_02 import (
+from data_injestion_01 import load_raw_data
+from model_training_02 import (
     compute_model_metrics,
     data_loader,
     train_and_save_model,
